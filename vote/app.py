@@ -34,7 +34,7 @@ def home():
             queue = get_queue()
             vote = request.form['vote']
             data = json.dumps({'voter_id': voter_id, 'vote': vote})
-            queue.put_message('votes', unicode(data))
+            queue.put_message('votes', data)
         except NameError as error:
             resp = make_response(render_template(
                 'index.html',
