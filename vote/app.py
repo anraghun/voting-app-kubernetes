@@ -35,12 +35,12 @@ def home():
             vote = request.form['vote']
             data = json.dumps({'voter_id': voter_id, 'vote': vote})
             queue.put_message('votes', unicode(data))
-        except:
+        except NameError as error:
             resp = make_response(render_template(
                 'index.html',
                 option_a=option_a,
                 option_b=option_b,
-                hostname=sys.exc_info()[0],
+                hostname=error,
                 vote=vote,
             )) 
             resp.set_cookie('voter_id', voter_id)
