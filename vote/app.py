@@ -2,7 +2,6 @@ import os
 import random
 import json
 import socket
-import sys
 from flask import Flask, render_template, request, make_response, g
 from azure.storage.queue import QueueService, QueueMessageFormat
 
@@ -30,21 +29,10 @@ def home():
     vote = None
 
     if request.method == 'POST':
-        try:
-            queue = get_queue()
-            vote = request.form['vote']
-            data = json.dumps({'voter_id': voter_id, 'vote': vote})
-            queue.put_message('votes', data)
-        except NameError as error:
-            resp = make_response(render_template(
-                'index.html',
-                option_a=option_a,
-                option_b=option_b,
-                hostname=error,
-                vote=vote,
-            )) 
-            resp.set_cookie('voter_id', voter_id)
-            return resp
+        queue = get_queue()
+        vote = request.form['vote']
+        data = json.dumps({'voter_id': voter_id, 'vote': vote})
+        queue.put_message('votes', data)
 
     resp = make_response(render_template(
         'index.html',
