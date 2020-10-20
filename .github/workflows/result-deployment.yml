@@ -1,4 +1,11 @@
-on: [push]
+on:
+  push:
+    paths:
+      - result/**
+      - .github/workflows/result-deployment.yml
+    branches:
+      - master
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -37,13 +44,19 @@ jobs:
         container-registry-username: ${{ secrets.acr_ignitedevacr_username }}
         container-registry-password: ${{ secrets.acr_ignitedevacr_password }}
         secret-name: azureattachrdockerauth
-       
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: azure-attach-result-dev8dab
+        account-name: ${{ secrets.storage_account_name }}
+        access-key: ${{ secrets.storage_access_key }}
+        secret-name: azure-storage
+
     - uses: azure/k8s-deploy@v1.2
       with:
         namespace: azure-attach-result-dev8dab
         manifests: |
-          manifests/deployment.yml
-          manifests/service.yml
+          result/result.yaml
         images: |
           ignitedevacr.azurecr.io/azureattachresultdev:${{ github.sha }}
         imagepullsecrets: |
