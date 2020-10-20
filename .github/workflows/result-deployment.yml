@@ -56,7 +56,8 @@ jobs:
       with:
         namespace: azure-attach-result-dev8dab
         manifests: |
-          result/result.yaml
+          manifests/deployment.yml
+          manifests/service.yml
         images: |
           ignitedevacr.azurecr.io/azureattachresultdev:${{ github.sha }}
         imagepullsecrets: |
