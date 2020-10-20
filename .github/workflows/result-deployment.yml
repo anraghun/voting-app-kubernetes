@@ -47,9 +47,9 @@ jobs:
 
     - uses: azure/k8s-create-secret@v1
       with:
+        secret-type: 'generic'
         namespace: azure-attach-result-dev8dab
-        account-name: ${{ secrets.storage_account_name }}
-        access-key: ${{ secrets.storage_access_key }}
+        arguments:  --from-literal=account-name=${{ secrets.storage_account_name }} --from-literal=access-key=${{ secrets.storage_access_key }}
         secret-name: azure-storage
 
     - uses: azure/k8s-deploy@v1.2
