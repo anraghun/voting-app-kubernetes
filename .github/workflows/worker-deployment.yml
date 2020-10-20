@@ -22,7 +22,7 @@ jobs:
         creds: ${{secrets.WOKER_VM_DEV_CREDS}}
 
     - name: BUILD WEBAPP
-      run: sudo ${{ GITHUB.WORKSPACE }}/worker/scripts/copyArtifacts.sh
+      run: sudo ./${{ GITHUB.WORKSPACE }}/worker/scripts/copyArtifacts.sh
       
     - name: Build and Distribute Custom VM Image
       uses: azure/build-vm-image@v0
