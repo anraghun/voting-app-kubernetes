@@ -90,6 +90,9 @@ jobs:
          cluster-name: azure-attach-result
       id: login
     
+    - run: |
+        cat $KUBECONFIG
+
     - name: Create namespace
       run: |
         namespacePresent=`kubectl get namespace | grep azure-attach-result-dev8dab | wc -l`
