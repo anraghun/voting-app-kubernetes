@@ -87,7 +87,7 @@ jobs:
          creds: ${{secrets.WOKER_VM_DEV_CREDS}}
          token: ${{secrets.RESULT_PROD_ARC_TOKEN}}
          resource-group: azure-attach-prod
-         cluster-name: azure-attach-result
+         cluster-name: azure-attach-result-prod
       id: login
     
     - name: Create namespace
