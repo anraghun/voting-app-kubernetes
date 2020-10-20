@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "azureattachresultdev-bbea"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "azureattachresultdev-bbea"
+  template:
+    metadata:
+      labels:
+        app: "azureattachresultdev-bbea"
+    spec:
+      containers:
+        - name: "azureattachresultdev-bbea"
+          image: "ignitedevacr.azurecr.io/azureattachresultdev"
+          ports:
+          - containerPort: 80
