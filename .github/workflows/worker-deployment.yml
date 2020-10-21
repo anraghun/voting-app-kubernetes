@@ -21,16 +21,15 @@ jobs:
       with:
         creds: ${{secrets.WOKER_VM_DEV_CREDS}}
 
+    - name: Create environment variables script
+      run: |
+        echo "$env:AZURE_STORAGE_ACCOUNT = \'${{secrets.storage_account_name}}\'" >> ${{GITHUB.WORKSPACE}}/worker/scripts/setEnvironmentVariables.ps1
+        echo "$env:AZURE_STORAGE_ACCESS_KEY = \'${{secrets.storage_access_key}}\'" >> ${{GITHUB.WORKSPACE}}/worker/scripts/setEnvironmentVariables.ps1
+
     - name: Build Worker
       run: |
         sudo chmod +x ${{ GITHUB.WORKSPACE }}/worker/scripts/copyArtifacts.sh
         sudo ${{ GITHUB.WORKSPACE }}/worker/scripts/copyArtifacts.sh
-    
-    - name: Log artifacts
-      run: |
-        cd ${{ GITHUB.WORKSPACE }}/workflow_artifacts
-        pwd
-        ls -ltr
 
     - name: Build and Distribute Custom VM Image     
       uses: azure/build-vm-image@v0
@@ -42,4 +41,4 @@ jobs:
         source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest
         customizer-source: ${{ GITHUB.WORKSPACE }}/workflow_artifacts
         customizer-script: |
-          & 'c:\workflow-artifacts\webApp\webconfig.ps1'
+          & 'c:\workflow-artifacts\scripts\webconfig.ps1'
