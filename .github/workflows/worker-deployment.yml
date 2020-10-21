@@ -9,9 +9,9 @@ on:
       - master
 
 jobs:      
-  job1:
+  create-and-provision-vm:
     runs-on: ubuntu-latest
-    name: Create Custom Linux Image
+    name: Create Custom Image and Provision VM
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -21,7 +21,7 @@ jobs:
       with:
         creds: ${{secrets.WOKER_VM_DEV_CREDS}}
 
-    - name: BUILD WEBAPP
+    - name: Build Worker
       run: |
         sudo chmod +x ${{ GITHUB.WORKSPACE }}/worker/scripts/copyArtifacts.sh
         sudo ${{ GITHUB.WORKSPACE }}/worker/scripts/copyArtifacts.sh
@@ -29,7 +29,7 @@ jobs:
     - name: Build and Distribute Custom VM Image
       uses: azure/build-vm-image@v0
       with:        
-        resource-group-name: 'azure-attach-mi-dev'
+        resource-group-name: 'azure-attach-dev'
         location: 'eastus'
         managed-identity: 'azure-attach-dev-mi'
         source-os-type: 'windows'
