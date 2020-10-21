@@ -29,7 +29,7 @@ jobs:
     - name: Build and Distribute Custom VM Image
       uses: azure/build-vm-image@v0
       with:        
-        resource-group-name: 'azure-attach-dev'
+        resource-group-name: 'azure-attach-mi-dev'
         location: 'eastus'
         managed-identity: 'azure-attach-dev-mi'
         source-os-type: 'windows'
