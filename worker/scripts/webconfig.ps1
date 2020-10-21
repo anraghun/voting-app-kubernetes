@@ -1,4 +1,5 @@
-.\setEnvironmentVariables.ps1
+$env:AZURE_STORAGE_ACCOUNT = $args[0]
+$env:AZURE_STORAGE_ACCESS_KEY = $args[1]
 
 .\dotnet-install.ps1
 
