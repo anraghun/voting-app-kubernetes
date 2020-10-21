@@ -39,6 +39,7 @@ jobs:
         managed-identity: 'azure-attach-dev-mi'
         location: 'eastus'
         source-os-type: 'windows'        
-        source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest        
-        # customizer-script: |
-        #   & 'c:\workflow-artifacts\webApp\webconfig.ps1'
+        source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest
+        customizer-source: ${{ GITHUB.WORKSPACE }}/workflow_artifacts
+        customizer-script: |
+          & 'c:\workflow-artifacts\webApp\webconfig.ps1'
