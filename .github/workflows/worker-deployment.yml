@@ -25,7 +25,13 @@ jobs:
       run: |
         sudo chmod +x ${{ GITHUB.WORKSPACE }}/worker/scripts/copyArtifacts.sh
         sudo ${{ GITHUB.WORKSPACE }}/worker/scripts/copyArtifacts.sh
-      
+    
+    - name: Log artifacts
+      run: |
+        cd ${{ GITHUB.WORKSPACE }}/workflow_artifacts
+        pwd
+        ls -ltr
+        
     - name: Build and Distribute Custom VM Image
       uses: azure/build-vm-image@v0
       with:        
