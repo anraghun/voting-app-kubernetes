@@ -5,7 +5,7 @@ Install-WindowsFeature -name Web-Server -IncludeManagementTools
 New-Item C:\VotingWorkerApp -type Directory
 
 # Copy over build artifacts
-Copy-Item "C:\buildArtifacts\*" -Destination "C:\VotingWorkerApp" -Recurse
+Copy-Item "C:\workflow-artifacts\*" -Destination "C:\VotingWorkerApp" -Recurse
  
 # Create site
 New-IISSite -Name "VotingWorkerApp" -BindingInformation "*:8080:" -PhysicalPath "C:\VotingWorkerApp" 

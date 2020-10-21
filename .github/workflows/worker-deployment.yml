@@ -31,15 +31,14 @@ jobs:
         cd ${{ GITHUB.WORKSPACE }}/workflow_artifacts
         pwd
         ls -ltr
-        
-    - name: Build and Distribute Custom VM Image
+
+    - name: Build and Distribute Custom VM Image     
       uses: azure/build-vm-image@v0
       with:        
         resource-group-name: 'azure-attach-dev'
-        location: 'eastus'
         managed-identity: 'azure-attach-dev-mi'
-        source-os-type: 'windows'
-        source-image-type: 'PlatformImage'
-        source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest     
-        customizer-script: |
-          & 'c:\workflow-artifacts\scripts\webconfig.ps1'
+        location: 'eastus'
+        source-os-type: 'windows'        
+        source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest        
+        # customizer-script: |
+        #   & 'c:\workflow-artifacts\webApp\webconfig.ps1'
