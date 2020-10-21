@@ -36,6 +36,4 @@ jobs:
         source-image-type: 'PlatformImage'
         source-image: MicrosoftWindowsServer:WindowsServer:2019-Datacenter:latest     
         customizer-script: |
-          sudo mkdir /buildArtifacts
-          sudo cp -r /tmp/ /buildArtifacts/
-          sh /buildArtifacts/scripts/webdeploy.ps1
+          & 'c:\workflow-artifacts\scripts\webconfig.ps1'
