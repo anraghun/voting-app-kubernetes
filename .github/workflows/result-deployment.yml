@@ -7,80 +7,11 @@ on:
       - master
 
 jobs:
-  build-and-deploy-dev:
+   build-and-deploy-prod:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    
-    - uses: azure/docker-login@v1
-      with:
-        login-server: ignitedevacr.azurecr.io
-        username: ${{ secrets.acr_ignitedevacr_username }}
-        password: ${{ secrets.acr_ignitedevacr_password }}
-    
-    - name: Build and push image to ACR
-      id: build-image
-      run: |
-        docker build "$GITHUB_WORKSPACE/result" -f  "result/Dockerfile" -t ignitedevacr.azurecr.io/azureattachresultdev:${{ github.sha }}
-        docker push ignitedevacr.azurecr.io/azureattachresultdev:${{ github.sha }}
-    
-    - uses: azure/k8s-set-context@v1
-      with:
-         kubeconfig: ${{ secrets.aks_azureattachresultdev_kubeConfig }}
-      id: login
-    
-    - name: Create namespace
-      run: |
-        namespacePresent=`kubectl get namespace | grep azure-attach-result-dev8dab | wc -l`
-        if [ $namespacePresent -eq 0 ]
-        then
-            echo `kubectl create namespace azure-attach-result-dev8dab`
-        fi
 
-    - uses: azure/k8s-create-secret@v1
-      with:
-        namespace: azure-attach-result-dev8dab
-        container-registry-url: ignitedevacr.azurecr.io
-        container-registry-username: ${{ secrets.acr_ignitedevacr_username }}
-        container-registry-password: ${{ secrets.acr_ignitedevacr_password }}
-        secret-name: azureattachrdockerauth
-
-    - uses: azure/k8s-create-secret@v1
-      with:
-        secret-type: 'generic'
-        namespace: azure-attach-result-dev8dab
-        arguments:  --from-literal=account-name=${{ secrets.storage_account_name }} --from-literal=access-key=${{ secrets.storage_access_key }}
-        secret-name: azure-storage
-
-    - uses: azure/k8s-deploy@v1.2
-      with:
-        namespace: azure-attach-result-dev8dab
-        manifests: |
-          manifests/deployment.yml
-          manifests/service.yml
-        images: |
-          ignitedevacr.azurecr.io/azureattachresultdev:${{ github.sha }}
-        imagepullsecrets: |
-          azureattachrdockerauth
-
-  build-and-deploy-prod:
-    needs: build-and-deploy-dev
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    
-    - uses: azure/docker-login@v1
-      with:
-        login-server: ignitedevacr.azurecr.io
-        username: ${{ secrets.acr_ignitedevacr_username }}
-        password: ${{ secrets.acr_ignitedevacr_password }}
-    
-    - name: Build and push image to ACR
-      id: build-image
-      run: |
-        docker build "$GITHUB_WORKSPACE/result" -f  "result/Dockerfile" -t ignitedevacr.azurecr.io/azureattachresultdev:${{ github.sha }}
-        docker push ignitedevacr.azurecr.io/azureattachresultdev:${{ github.sha }}
-    
     - uses: azure/k8s-set-context@cluster-connect
       with:
          cluster-type: 'arc'
@@ -90,36 +21,3 @@ jobs:
          cluster-name: azure-attach-result-prod
       id: login
     
-    - name: Create namespace
-      run: |
-        namespacePresent=`kubectl get namespace | grep azure-attach-result-dev8dab | wc -l`
-        if [ $namespacePresent -eq 0 ]
-        then
-            echo `kubectl create namespace azure-attach-result-dev8dab`
-        fi
-
-    - uses: azure/k8s-create-secret@v1
-      with:
-        namespace: azure-attach-result-dev8dab
-        container-registry-url: ignitedevacr.azurecr.io
-        container-registry-username: ${{ secrets.acr_ignitedevacr_username }}
-        container-registry-password: ${{ secrets.acr_ignitedevacr_password }}
-        secret-name: azureattachrdockerauth
-
-    - uses: azure/k8s-create-secret@v1
-      with:
-        secret-type: 'generic'
-        namespace: azure-attach-result-dev8dab
-        arguments:  --from-literal=account-name=${{ secrets.storage_account_name }} --from-literal=access-key=${{ secrets.storage_access_key }}
-        secret-name: azure-storage
-
-    - uses: azure/k8s-deploy@v1.2
-      with:
-        namespace: azure-attach-result-dev8dab
-        manifests: |
-          manifests/deployment.yml
-          manifests/service.yml
-        images: |
-          ignitedevacr.azurecr.io/azureattachresultdev:${{ github.sha }}
-        imagepullsecrets: |
-          azureattachrdockerauth
