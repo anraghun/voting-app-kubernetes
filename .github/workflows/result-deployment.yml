@@ -1,10 +1,4 @@
-on:
-  push:
-    paths:
-      - result/**
-      - .github/workflows/result-deployment.yml
-    branches:
-      - master
+on: push
 
 jobs:
    build-and-deploy-prod:
