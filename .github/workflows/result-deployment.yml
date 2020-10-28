@@ -15,3 +15,4 @@ jobs:
          cluster-name: azure-attach-result-prod
       id: login
     
+    - run: kubectl get nodes
